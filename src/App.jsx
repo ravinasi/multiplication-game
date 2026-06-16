@@ -1203,8 +1203,6 @@ export default function App() {
 
           {/* Input Section - Right */}
           <div className="bg-white rounded-2xl shadow-2xl p-6">
-            <p className="text-gray-600 text-sm md:text-base mb-4 font-semibold text-center">Fill in the numbers:</p>
-
             {/* Input Container - Vertical Layout */}
             <div className="flex flex-col items-center gap-3">
               {/* Row 1: Factor1 × Factor2 */}
@@ -1279,10 +1277,6 @@ export default function App() {
                 ✓ Check
               </button>
 
-              {/* Hint */}
-              <p className="text-gray-500 text-xs md:text-sm mt-3 font-medium text-center">
-                💡 Count groups and items!
-              </p>
             </div>
           </div>
         </div>
