@@ -623,6 +623,7 @@ export default function App() {
   const [showWelcome, setShowWelcome] = useState(true);
   const [totalExercises, setTotalExercises] = useState(10);
   const [focusedInput, setFocusedInput] = useState(null);
+  const lastFocusedInputRef = React.useRef(null);
 
   // Ref for first input field (factor1)
   const factor1InputRef = React.useRef(null);
@@ -693,21 +694,24 @@ export default function App() {
 
   // Keypad handlers
   const handleKeypadNumber = (num) => {
-    if (!focusedInput) return;
-    const currentValue = userInputs[focusedInput];
+    const inputField = lastFocusedInputRef.current;
+    if (!inputField) return;
+    const currentValue = userInputs[inputField];
     const newValue = currentValue + num;
-    handleInputChange(focusedInput, newValue);
+    handleInputChange(inputField, newValue);
   };
 
   const handleKeypadBackspace = () => {
-    if (!focusedInput) return;
-    const currentValue = userInputs[focusedInput];
-    handleInputChange(focusedInput, currentValue.slice(0, -1));
+    const inputField = lastFocusedInputRef.current;
+    if (!inputField) return;
+    const currentValue = userInputs[inputField];
+    handleInputChange(inputField, currentValue.slice(0, -1));
   };
 
   const handleKeypadClear = () => {
-    if (!focusedInput) return;
-    handleInputChange(focusedInput, '');
+    const inputField = lastFocusedInputRef.current;
+    if (!inputField) return;
+    handleInputChange(inputField, '');
   };
 
   // Validate and submit answer
@@ -1075,7 +1079,10 @@ export default function App() {
                   placeholder="?"
                   error={errors.factor1}
                   onKeyPress={handleKeyPress}
-                  onFocus={() => setFocusedInput('factor1')}
+                  onFocus={() => {
+                    setFocusedInput('factor1');
+                    lastFocusedInputRef.current = 'factor1';
+                  }}
                   onBlur={() => setFocusedInput(null)}
                   minValue={minMultiplier}
                   maxValue={maxMultiplier}
@@ -1089,7 +1096,10 @@ export default function App() {
                   placeholder="?"
                   error={errors.factor2}
                   onKeyPress={handleKeyPress}
-                  onFocus={() => setFocusedInput('factor2')}
+                  onFocus={() => {
+                    setFocusedInput('factor2');
+                    lastFocusedInputRef.current = 'factor2';
+                  }}
                   onBlur={() => setFocusedInput(null)}
                   minValue={minMultiplier}
                   maxValue={maxMultiplier}
@@ -1111,7 +1121,10 @@ export default function App() {
                   placeholder="?"
                   error={errors.result}
                   onKeyPress={handleKeyPress}
-                  onFocus={() => setFocusedInput('result')}
+                  onFocus={() => {
+                    setFocusedInput('result');
+                    lastFocusedInputRef.current = 'result';
+                  }}
                   onBlur={() => setFocusedInput(null)}
                   minValue={minMultiplier * minMultiplier}
                   maxValue={maxMultiplier * maxMultiplier}
