@@ -1,5 +1,81 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
+// Translations
+const translations = {
+  en: {
+    title: 'Multiplication Master',
+    subtitle: 'Learn Multiplication The Fun Way!',
+    exercises: 'Number of Exercises',
+    difficulty: 'Difficulty Level',
+    selectExercises: 'Or enter custom (1-100)',
+    easy: '0 - 5 Easy',
+    normal: '2 - 10 Normal',
+    hard: '5 - 10 Hard',
+    expert: '0 - 10 Expert',
+    startGame: 'Start Game',
+    settings: 'Settings',
+    range: 'Multiplication Range',
+    current: 'Current:',
+    min: 'Min:',
+    max: 'Max:',
+    quickPresets: 'Quick Presets:',
+    done: '✓ Done',
+    score: 'Score',
+    theme: 'Theme',
+    rangeLabel: 'Range',
+    delete: '← Delete',
+    clear: 'Clear',
+    perfectScore: 'Perfect Score! 🏆',
+    excellentWork: 'Excellent Work! 🌟',
+    greatJob: 'Great Job! 🎉',
+    goodEffort: 'Good Effort! 💪',
+    keepPracticing: 'Keep Practicing! 📚',
+    finalScore: 'Final Score',
+    perfectMaster: "You're a multiplication master! 👑",
+    outstanding: 'Outstanding performance! Keep it up!',
+    niceWork: 'Nice work! Practice makes perfect!',
+    goodStart: 'Good start! Practice more to improve!',
+    dontGiveUp: "Don't give up! Try again and you'll do better!",
+    playAgain: 'Play Again',
+  },
+  he: {
+    title: 'מנהל הכפל',
+    subtitle: 'למד כפל בדרך כיפית!',
+    exercises: 'מספר תרגילים',
+    difficulty: 'רמת קושי',
+    selectExercises: 'או הכנס מותאם אישית (1-100)',
+    easy: '0 - 5 קל',
+    normal: '2 - 10 בינוני',
+    hard: '5 - 10 קשה',
+    expert: '0 - 10 מומחה',
+    startGame: 'התחל משחק',
+    settings: 'הגדרות',
+    range: 'טווח כפל',
+    current: 'נוכחי:',
+    min: 'מינ:',
+    max: 'מקס:',
+    quickPresets: 'הגדרות מהירות:',
+    done: '✓ בוצע',
+    score: 'ניקוד',
+    theme: 'עיצוב',
+    rangeLabel: 'טווח',
+    delete: 'מחק ←',
+    clear: 'נקה',
+    perfectScore: 'ניקוד מושלם! 🏆',
+    excellentWork: 'עבודה מעולה! 🌟',
+    greatJob: 'עבודה נהדרת! 🎉',
+    goodEffort: 'ניסיון טוב! 💪',
+    keepPracticing: 'המשך להתרגל! 📚',
+    finalScore: 'ניקוד סופי',
+    perfectMaster: 'אתה מנהל כפל אמיתי! 👑',
+    outstanding: 'ביצוע מעולה! המשך ככה!',
+    niceWork: 'עבודה נחמדה! התרגול הוא המפתח!',
+    goodStart: 'התחלה טובה! התרגל יותר כדי להשתפר!',
+    dontGiveUp: 'אל תוותר! בפעם הבאה תוכל להצליח!',
+    playAgain: 'שחק שוב',
+  },
+};
+
 // Theme configurations with visual representations
 const THEMES = [
   {
@@ -458,7 +534,7 @@ const SettingsPanel = ({ minMultiplier, maxMultiplier, onMinMultiplierChange, on
 };
 
 // Welcome Screen Component
-const WelcomeScreen = ({ onStartGame }) => {
+const WelcomeScreen = ({ onStartGame, language, setLanguage, t }) => {
   const [selectedExercises, setSelectedExercises] = useState(10);
   const [customExercises, setCustomExercises] = useState('');
   const [minMultiplier, setMinMultiplier] = useState(0);
@@ -466,10 +542,10 @@ const WelcomeScreen = ({ onStartGame }) => {
 
   const exerciseOptions = [5, 10, 15, 20];
   const difficultyPresets = [
-    { label: '0 - 5 Easy', min: 0, max: 5 },
-    { label: '2 - 10 Normal', min: 2, max: 10 },
-    { label: '5 - 10 Hard', min: 5, max: 10 },
-    { label: '0 - 10 Expert', min: 0, max: 10 },
+    { label: t.easy, min: 0, max: 5 },
+    { label: t.normal, min: 2, max: 10 },
+    { label: t.hard, min: 5, max: 10 },
+    { label: t.expert, min: 0, max: 10 },
   ];
 
   const handleStart = () => {
@@ -488,18 +564,42 @@ const WelcomeScreen = ({ onStartGame }) => {
 
       {/* Welcome Card */}
       <div className="relative bg-white rounded-3xl shadow-2xl p-8 md:p-12 max-w-lg w-full my-8">
+        {/* Language Toggle */}
+        <div className="flex justify-end gap-2 mb-4">
+          <button
+            onClick={() => setLanguage('en')}
+            className={`px-3 py-1 rounded-lg font-bold text-sm transition-all ${
+              language === 'en'
+                ? 'bg-purple-500 text-white'
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            }`}
+          >
+            EN
+          </button>
+          <button
+            onClick={() => setLanguage('he')}
+            className={`px-3 py-1 rounded-lg font-bold text-sm transition-all ${
+              language === 'he'
+                ? 'bg-purple-500 text-white'
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            }`}
+          >
+            עברית
+          </button>
+        </div>
+
         {/* Title */}
         <div className="text-center mb-8">
           <div className="text-6xl mb-4">🎮</div>
           <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
-            Multiplication Master
+            {t.title}
           </h1>
-          <p className="text-gray-600 text-lg">Customize your practice session</p>
+          <p className="text-gray-600 text-lg">{t.subtitle}</p>
         </div>
 
         {/* Exercise Selection */}
         <div className="mb-8">
-          <p className="text-gray-700 font-semibold mb-3 text-center">Number of Exercises:</p>
+          <p className="text-gray-700 font-semibold mb-3 text-center">{t.exercises}:</p>
           <div className="grid grid-cols-2 gap-3 mb-4">
             {exerciseOptions.map((num) => (
               <button
@@ -529,14 +629,14 @@ const WelcomeScreen = ({ onStartGame }) => {
               setCustomExercises(e.target.value);
               if (e.target.value) setSelectedExercises(0);
             }}
-            placeholder="Or enter custom (1-100)"
+            placeholder={t.selectExercises}
             className="w-full px-4 py-2 text-center text-sm font-bold border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-300"
           />
         </div>
 
         {/* Difficulty Selection */}
         <div className="mb-8">
-          <p className="text-gray-700 font-semibold mb-3 text-center">Difficulty (Multiplication Range):</p>
+          <p className="text-gray-700 font-semibold mb-3 text-center">{t.difficulty}:</p>
           <div className="grid grid-cols-2 gap-2 mb-4">
             {difficultyPresets.map((preset) => (
               <button
@@ -604,7 +704,7 @@ const WelcomeScreen = ({ onStartGame }) => {
           onClick={handleStart}
           className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-4 px-6 rounded-2xl hover:shadow-xl transform hover:scale-105 transition-all duration-300 active:scale-95 text-lg"
         >
-          ✨ Start Game
+          ✨ {t.startGame}
         </button>
 
         {/* Info */}
@@ -632,7 +732,10 @@ export default function App() {
   const [showWelcome, setShowWelcome] = useState(true);
   const [totalExercises, setTotalExercises] = useState(10);
   const [focusedInput, setFocusedInput] = useState(null);
+  const [language, setLanguage] = useState('he');
   const lastFocusedInputRef = React.useRef(null);
+
+  const t = translations[language];
 
   // Ref for first input field (factor1)
   const factor1InputRef = React.useRef(null);
@@ -806,13 +909,13 @@ export default function App() {
 
   // Show welcome screen if needed
   if (showWelcome) {
-    return <WelcomeScreen onStartGame={startGame} />;
+    return <WelcomeScreen onStartGame={startGame} language={language} setLanguage={setLanguage} t={t} />;
   }
 
   if (!currentExercise) return null;
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden" style={{ backgroundColor: currentTheme.colors.bg }}>
+    <div className="min-h-screen w-full overflow-x-hidden" dir={language === 'he' ? 'rtl' : 'ltr'} style={{ backgroundColor: currentTheme.colors.bg }}>
       {/* Global animations */}
       <style>{`
         @keyframes fadeInScale {
