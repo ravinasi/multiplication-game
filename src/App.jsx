@@ -90,20 +90,29 @@ const NumericKeypad = ({ isVisible, onNumberClick, onClear, onBackspace }) => {
           {buttons.map((num) => (
             <button
               key={num}
-              onClick={() => onNumberClick(num)}
+              onMouseDown={(e) => {
+                e.preventDefault();
+                onNumberClick(num);
+              }}
               className="bg-gradient-to-br from-purple-400 to-pink-400 text-white font-bold text-xl py-4 rounded-xl hover:shadow-lg transition-all active:scale-95"
             >
               {num}
             </button>
           ))}
           <button
-            onClick={onBackspace}
+            onMouseDown={(e) => {
+              e.preventDefault();
+              onBackspace();
+            }}
             className="col-span-2 bg-orange-400 text-white font-bold py-4 rounded-xl hover:shadow-lg transition-all active:scale-95"
           >
             ← Delete
           </button>
           <button
-            onClick={onClear}
+            onMouseDown={(e) => {
+              e.preventDefault();
+              onClear();
+            }}
             className="col-span-3 bg-red-400 text-white font-bold py-4 rounded-xl hover:shadow-lg transition-all active:scale-95"
           >
             Clear
