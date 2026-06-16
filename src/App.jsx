@@ -77,18 +77,58 @@ const VisualGrid = ({ rows, cols, theme }) => {
   );
 };
 
+// Numeric Keypad Component
+const NumericKeypad = ({ isVisible, onNumberClick, onClear, onBackspace }) => {
+  if (!isVisible) return null;
+
+  const buttons = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
+
+  return (
+    <div className="fixed bottom-0 left-0 right-0 bg-white border-t-4 border-purple-500 shadow-2xl p-4 z-40">
+      <div className="max-w-lg mx-auto">
+        <div className="grid grid-cols-5 gap-2">
+          {buttons.map((num) => (
+            <button
+              key={num}
+              onClick={() => onNumberClick(num)}
+              className="bg-gradient-to-br from-purple-400 to-pink-400 text-white font-bold text-xl py-4 rounded-xl hover:shadow-lg transition-all active:scale-95"
+            >
+              {num}
+            </button>
+          ))}
+          <button
+            onClick={onBackspace}
+            className="col-span-2 bg-orange-400 text-white font-bold py-4 rounded-xl hover:shadow-lg transition-all active:scale-95"
+          >
+            ← Delete
+          </button>
+          <button
+            onClick={onClear}
+            className="col-span-3 bg-red-400 text-white font-bold py-4 rounded-xl hover:shadow-lg transition-all active:scale-95"
+          >
+            Clear
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Input field component with error state
-const InputField = React.forwardRef(({ value, onChange, placeholder, error, onKeyPress, minValue = 0, maxValue = 12 }, ref) => {
+const InputField = React.forwardRef(({ value, onChange, placeholder, error, onKeyPress, onFocus, onBlur, minValue = 0, maxValue = 12 }, ref) => {
   return (
     <div className="flex flex-col gap-1">
       <input
         ref={ref}
         type="number"
+        inputMode="none"
         min={minValue}
         max={maxValue}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onKeyPress={onKeyPress}
+        onFocus={onFocus}
+        onBlur={onBlur}
         placeholder={placeholder}
         className={`w-16 md:w-20 px-2 py-2 text-lg md:text-xl font-bold text-center rounded-lg border-2 transition-all duration-300 focus:outline-none focus:ring-3 ${
           error
@@ -582,6 +622,7 @@ export default function App() {
   const [isGameFinished, setIsGameFinished] = useState(false);
   const [showWelcome, setShowWelcome] = useState(true);
   const [totalExercises, setTotalExercises] = useState(10);
+  const [focusedInput, setFocusedInput] = useState(null);
 
   // Ref for first input field (factor1)
   const factor1InputRef = React.useRef(null);
@@ -648,6 +689,25 @@ export default function App() {
       setUserInputs((prev) => ({ ...prev, [field]: value }));
       setErrors((prev) => ({ ...prev, [field]: false }));
     }
+  };
+
+  // Keypad handlers
+  const handleKeypadNumber = (num) => {
+    if (!focusedInput) return;
+    const currentValue = userInputs[focusedInput];
+    const newValue = currentValue + num;
+    handleInputChange(focusedInput, newValue);
+  };
+
+  const handleKeypadBackspace = () => {
+    if (!focusedInput) return;
+    const currentValue = userInputs[focusedInput];
+    handleInputChange(focusedInput, currentValue.slice(0, -1));
+  };
+
+  const handleKeypadClear = () => {
+    if (!focusedInput) return;
+    handleInputChange(focusedInput, '');
   };
 
   // Validate and submit answer
@@ -1015,6 +1075,8 @@ export default function App() {
                   placeholder="?"
                   error={errors.factor1}
                   onKeyPress={handleKeyPress}
+                  onFocus={() => setFocusedInput('factor1')}
+                  onBlur={() => setFocusedInput(null)}
                   minValue={minMultiplier}
                   maxValue={maxMultiplier}
                 />
@@ -1027,6 +1089,8 @@ export default function App() {
                   placeholder="?"
                   error={errors.factor2}
                   onKeyPress={handleKeyPress}
+                  onFocus={() => setFocusedInput('factor2')}
+                  onBlur={() => setFocusedInput(null)}
                   minValue={minMultiplier}
                   maxValue={maxMultiplier}
                 />
@@ -1047,6 +1111,8 @@ export default function App() {
                   placeholder="?"
                   error={errors.result}
                   onKeyPress={handleKeyPress}
+                  onFocus={() => setFocusedInput('result')}
+                  onBlur={() => setFocusedInput(null)}
                   minValue={minMultiplier * minMultiplier}
                   maxValue={maxMultiplier * maxMultiplier}
                 />
@@ -1101,6 +1167,14 @@ export default function App() {
           onPlayAgain={playAgain}
         />
       )}
+
+      {/* Custom Numeric Keypad */}
+      <NumericKeypad
+        isVisible={focusedInput !== null && !isGameFinished}
+        onNumberClick={handleKeypadNumber}
+        onBackspace={handleKeypadBackspace}
+        onClear={handleKeypadClear}
+      />
     </div>
   );
 }
