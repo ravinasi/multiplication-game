@@ -1191,7 +1191,7 @@ export default function App() {
       {/* Main Game Area */}
       <div className="max-w-6xl mx-auto px-4 py-6">
         {/* Grid Layout: Visual Left, Input Right */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center mb-6" style={{ direction: 'ltr' }}>
           {/* Visual Representation - Left */}
           <div className="flex justify-center md:justify-end">
             <VisualGrid
