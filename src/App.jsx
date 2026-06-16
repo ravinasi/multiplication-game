@@ -39,7 +39,7 @@ const translations = {
     playAgain: 'Play Again',
   },
   he: {
-    title: 'מנהל הכפל',
+    title: 'מלך הכפל',
     subtitle: 'למד כפל בדרך כיפית!',
     exercises: 'מספר תרגילים',
     difficulty: 'רמת קושי',
@@ -1116,7 +1116,7 @@ export default function App() {
             {/* Left: Game Title */}
             <div className="flex-shrink-0">
               <h1 className="text-2xl md:text-3xl font-bold whitespace-nowrap">
-                🎮 Multiplication Master
+                🎮 {t.title}
               </h1>
             </div>
 
@@ -1124,7 +1124,7 @@ export default function App() {
             <div className="flex items-center gap-3 md:gap-4 flex-grow justify-center px-4">
               {/* Score Badge */}
               <div className="bg-white bg-opacity-20 backdrop-blur px-3 md:px-4 py-2 rounded-xl hover:bg-opacity-30 transition-all text-center min-w-fit">
-                <p className="text-xs opacity-75 font-medium">Score</p>
+                <p className="text-xs opacity-75 font-medium">{t.score}</p>
                 <p className="text-xl md:text-2xl font-bold">{score}/{totalExercises}</p>
               </div>
 
@@ -1133,7 +1133,7 @@ export default function App() {
 
               {/* Theme Badge */}
               <div className="bg-white bg-opacity-20 backdrop-blur px-3 md:px-4 py-2 rounded-xl hover:bg-opacity-30 transition-all text-center min-w-fit">
-                <p className="text-xs opacity-75 font-medium">Theme</p>
+                <p className="text-xs opacity-75 font-medium">{t.theme}</p>
                 <p className="text-sm md:text-base font-semibold truncate">{currentTheme.name}</p>
               </div>
 
@@ -1142,13 +1142,38 @@ export default function App() {
 
               {/* Range Badge */}
               <div className="bg-white bg-opacity-20 backdrop-blur px-3 md:px-4 py-2 rounded-xl hover:bg-opacity-30 transition-all text-center min-w-fit">
-                <p className="text-xs opacity-75 font-medium">Range</p>
+                <p className="text-xs opacity-75 font-medium">{t.rangeLabel}</p>
                 <p className="text-sm md:text-base font-semibold">{minMultiplier}-{maxMultiplier}</p>
               </div>
             </div>
 
-            {/* Right: Settings Button */}
-            <div className="flex-shrink-0">
+            {/* Right: Language Toggle & Settings */}
+            <div className="flex-shrink-0 flex items-center gap-2">
+              {/* Language Toggle */}
+              <div className="flex gap-1 bg-white bg-opacity-20 rounded-lg p-1">
+                <button
+                  onClick={() => setLanguage('en')}
+                  className={`px-2 py-1 rounded font-bold text-sm transition-all ${
+                    language === 'en'
+                      ? 'bg-white text-purple-600'
+                      : 'text-white hover:bg-white hover:bg-opacity-10'
+                  }`}
+                >
+                  EN
+                </button>
+                <button
+                  onClick={() => setLanguage('he')}
+                  className={`px-2 py-1 rounded font-bold text-sm transition-all ${
+                    language === 'he'
+                      ? 'bg-white text-purple-600'
+                      : 'text-white hover:bg-white hover:bg-opacity-10'
+                  }`}
+                >
+                  עברית
+                </button>
+              </div>
+
+              {/* Settings Button */}
               <button
                 onClick={() => setShowSettings(true)}
                 className="bg-white bg-opacity-20 hover:bg-opacity-30 text-white p-3 rounded-xl transition-all duration-300 transform hover:scale-110 active:scale-95"
